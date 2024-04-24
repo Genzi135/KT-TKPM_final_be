@@ -5,7 +5,6 @@ import { Repository } from 'typeorm';
 import { LoginDto } from '../dtos/LoginDto';
 import { LoginResponseDto } from '../dtos/LoginResponseDto';
 import { JwtService } from '@nestjs/jwt';
-import { log } from 'console';
 
 @Injectable()
 export class AuthService {
