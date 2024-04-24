@@ -3,7 +3,9 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Authentication } from 'src/entites/Authentication.entity';
 import { Repository } from 'typeorm';
 import { LoginDto } from '../dtos/LoginDto';
+import { LoginResponseDto } from '../dtos/LoginResponseDto';
 import { JwtService } from '@nestjs/jwt';
+import { log } from 'console';
 
 @Injectable()
 export class AuthService {
@@ -16,15 +18,15 @@ export class AuthService {
   async login(loginDto: LoginDto) {
     const { username, password } = loginDto;
 
-    const user = await this.authRepository.findOne({ where: { username } });
-    if (!user) throw new BadRequestException('Bad credentials');
+    const auth = await this.authRepository.findOne({ where: { username } });
+    if (!auth) throw new BadRequestException('Bad credentials');
 
-    const isPasswordMatch = await user.comparePassword(password);
+    const isPasswordMatch = await auth.comparePassword(password);
     if (!isPasswordMatch) throw new BadRequestException('Bad credentials');
 
-    const payload = { id: user.username, type: user.type };
+    const payload = { id: auth.username, type: auth.type };
     const token = this.jwtService.sign(payload);
 
-    return token;
+    return new LoginResponseDto(token);
   }
 }

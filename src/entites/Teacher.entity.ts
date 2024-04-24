@@ -1,10 +1,10 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Major } from './Major.entity';
 
 @Entity({ name: 'teachers' })
 export class Teacher {
-  @PrimaryGeneratedColumn()
-  int: number;
+  @PrimaryColumn()
+  int: string;
 
   @Column({ name: 'name' })
   name: string;
