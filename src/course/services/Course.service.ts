@@ -34,12 +34,12 @@ export class CourseService {
         });
 
         const result = curriculum.curriculumCourses.map(curriculumCourse => {
-            return new CourseResponseDto(curriculumCourse.course);
+            return new CourseResponseDto(curriculumCourse);
         })
         return result;
     }
 
-    async getCourseForRegistration({ studentId, semesterId }): Promise<CurriculumCourse[]> {
+    async getCourseForRegistration({ studentId, semesterId }): Promise<CourseResponseDto[]> {
         const student = await this.studentRepository.findOne({ where: { id: studentId }, relations: ['major'] });
 
         const [curriculum, getStudentCourseHasGrade, classInSemeseter] = await Promise.all([
@@ -68,6 +68,10 @@ export class CourseService {
         result = result.filter(el => {
             const isCourseInCurrentSemester = courseInCurrentSemester.some(course => course.id === course.id);
             return isCourseInCurrentSemester;
+        })
+
+        result = result.map(curriculumCourse => {
+            return new CourseResponseDto(curriculumCourse);
         })
         return result;
     }

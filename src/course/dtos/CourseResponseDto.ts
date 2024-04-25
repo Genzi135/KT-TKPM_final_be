@@ -1,25 +1,30 @@
 import { Course } from "src/entites/Course.entity";
+import { CurriculumCourse } from "src/entites/CurriculumCourse.entity";
 import { Major } from "src/entites/Major.entity";
-import { CourseType } from "src/interfaces/course.interface";
+import { CourseType, CurriculumCourseType } from "src/interfaces/course.interface";
 
 export class CourseResponseDto {
     id: number;
     name: string;
-    type: CourseType;
+    courseType: CourseType;
     theorySessions: number;
     practiceSessions: number;
     credits: number;
     major: Major;
+    maxElectiveCredits: number;
+    type: CurriculumCourseType;
     prerequisteCourses: Course[];
 
-    constructor(data: Course) {
+    constructor(data: CurriculumCourse) {
         this.id = data.id;
-        this.name = data.name;
+        this.name = data.course.name;
+        this.courseType = data.course.type;
+        this.theorySessions = data.course.theorySessions;
+        this.practiceSessions = data.course.practiceSessions;
+        this.credits = data.course.credits;
+        this.major = data.course.major;
+        this.prerequisteCourses = data.course.prerequisteCourses.map(prerequisteCourse => prerequisteCourse.prerequisteCourse);
+        this.maxElectiveCredits = data.maxElectiveCredits
         this.type = data.type;
-        this.theorySessions = data.theorySessions;
-        this.practiceSessions = data.practiceSessions;
-        this.credits = data.credits;
-        this.major = data.major;
-        this.prerequisteCourses = data.prerequisteCourses.map(prerequisteCourse => prerequisteCourse.prerequisteCourse);
     }
 }
