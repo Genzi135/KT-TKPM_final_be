@@ -8,6 +8,7 @@ import { Grade } from "src/entites/Grade.entity";
 import { Student } from "src/entites/Student.entity";
 import { JwtModule } from "@nestjs/jwt";
 import { Class } from "src/entites/Class.entity";
+import { ClassService } from "./services/Class.service";
 
 @Module({
     imports: [
@@ -15,7 +16,7 @@ import { Class } from "src/entites/Class.entity";
         JwtModule
     ],
     controllers: [CourseController],
-    providers: [CourseService],
+    providers: [CourseService, ClassService],
     exports: [],
 })
 export class CourseModule {}

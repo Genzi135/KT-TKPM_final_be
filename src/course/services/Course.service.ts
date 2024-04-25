@@ -42,24 +42,27 @@ export class CourseService {
     async getCourseForRegistration({ studentId, semesterId }): Promise<CurriculumCourse[]> {
         const student = await this.studentRepository.findOne({ where: { id: studentId }, relations: ['major'] });
 
-        const curriculum = await this.curriculumRepository.findOne({
-            where: {
-                academicYear: student.academicYear,
-                major: { id: student.major.id }
-            },
-            relations: ['curriculumCourses']
-        });
+        const [curriculum, getStudentCourseHasGrade, classInSemeseter] = await Promise.all([
+            this.curriculumRepository.findOne({
+                where: {
+                    academicYear: student.academicYear,
+                    major: { id: student.major.id }
+                },
+                relations: ['curriculumCourses', 'curriculumCourses.course', 'curriculumCourses.course.prerequisteCourses']
+            }),
+            this.gradeRepository.find({ where: { student: { id: studentId } } }),
+            this.classRepository.find({ where: { semester: { id: semesterId } }, relations: ['course'] })
+        ]);
+
         const curriculumCourses = curriculum.curriculumCourses;
 
         let result = [];
-        const getStudentCourseHasGrade = await this.gradeRepository.find({ where: { student: { id: studentId } } })
 
         result = curriculumCourses.filter(course => {
             const isCourseHasGrade = getStudentCourseHasGrade.some(grade => grade.course.id === course.course.id);
             return !isCourseHasGrade;
         })
-
-        const classInSemeseter = await this.classRepository.find({ where: { semester: { id: semesterId } }, relations: ['course'] });
+        
         const courseInCurrentSemester = classInSemeseter.map(class_ => class_.course);
         
         result = result.filter(el => {

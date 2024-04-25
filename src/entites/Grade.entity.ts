@@ -41,7 +41,7 @@ export class Grade {
     @Column({name: 'practial_grade_3'})
     practialGrade3: number;
 
-    @Column({name: 'practial_grade_4'})
+    @Column({name: 'mid_term_grade'})
     midTermGrade: number;
 
     @Column({name: 'final_grade'})
