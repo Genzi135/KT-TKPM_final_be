@@ -2,14 +2,13 @@ import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColum
 import { Course } from './Course.entity';
 import { Curriculum } from './Curriculum.entity';
 import { CurriculumCourseType } from 'src/interfaces/course.interface';
-import { PrerequisteCourse } from './PrerequisteCourse.entity';
 
 @Entity({ name: 'curriculum_courses' })
 export class CurriculumCourse {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Course)
+  @ManyToOne(() => Course, { eager: true })
   @JoinColumn({ name: 'course_id' })
   course: Course;
 
@@ -26,6 +25,5 @@ export class CurriculumCourse {
   @Column({ name: 'max_elective_credit', default: 0 })
   maxElectiveCredits: number;
 
-  @OneToMany(() => PrerequisteCourse, (prerequisteCourse) => prerequisteCourse.course)
-  prerequisteCourses: PrerequisteCourse[];
+  
 }

@@ -1,5 +1,6 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Major } from './Major.entity';
+import { CurriculumCourse } from './CurriculumCourse.entity';
 
 @Entity({ name: 'curriculums' })
 export class Curriculum {
@@ -12,4 +13,7 @@ export class Curriculum {
   @ManyToOne(() => Major)
   @JoinColumn({ name: 'major_id' })
   major: Major;
+
+  @OneToMany(() => CurriculumCourse, (curriculumCourse) => curriculumCourse.curriculum, {eager: true, cascade: true})
+  curriculumCourses: CurriculumCourse[];
 }

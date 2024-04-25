@@ -1,3 +1,5 @@
+import { Major } from 'src/entites/Major.entity';
+import { MajorClass } from 'src/entites/MajorClass.entity';
 import { Student } from 'src/entites/Student.entity';
 
 export class StudentResponseDto {
@@ -7,8 +9,8 @@ export class StudentResponseDto {
   phone: string;
   dateOfBirth: string;
   academicYear: string;
-  major: string;
-  majorClass: string;
+  major: Major;
+  majorClass: MajorClass;
 
   constructor(student: Student) {
     this.id = student.id;
@@ -17,7 +19,7 @@ export class StudentResponseDto {
     this.phone = student.phone;
     this.dateOfBirth = student.dateOfBirth.toString();
     this.academicYear = student.academicYear;
-    this.major = student.major.name;
-    this.majorClass = student.majorClass.name;
+    this.major = student.major;
+    this.majorClass = student.majorClass;
   }
 }

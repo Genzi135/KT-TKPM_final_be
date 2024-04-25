@@ -1,6 +1,7 @@
 import { CourseType } from 'src/interfaces/course.interface';
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 import { Major } from './Major.entity';
+import { PrerequisteCourse } from './PrerequisteCourse.entity';
 
 @Entity({ name: 'courses' })
 export class Course {
@@ -25,4 +26,7 @@ export class Course {
   @ManyToOne(() => Major)
   @JoinColumn({ name: 'major_id' })
   major: Major;
+
+  @OneToMany(() => PrerequisteCourse, (prerequisteCourse) => prerequisteCourse.course, { eager: true, cascade: true })
+  prerequisteCourses: PrerequisteCourse[];
 }
