@@ -4,7 +4,7 @@ import { Major } from './Major.entity';
 @Entity({ name: 'teachers' })
 export class Teacher {
   @PrimaryColumn()
-  int: string;
+  id: string;
 
   @Column({ name: 'name' })
   name: string;
