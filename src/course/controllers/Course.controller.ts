@@ -23,7 +23,7 @@ export class CourseController {
         return this.courseService.getCourseForRegistration({studentId: id, semesterId});
     }
 
-    @Get('/class/:courseId/semester/:semesterId')
+    @Get('/:courseId/class/semester/:semesterId')
     @UseGuards(AuthGuard)
     async getClassByCourseId(@Param('courseId') courseId: number, @Param('semesterId') semesterId: number) {
         return this.classService.getClassByCourseId({courseId, semesterId});
