@@ -6,11 +6,11 @@ export class PrerequisteCourse {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @ManyToOne(() => Course)
+  @ManyToOne(() => Course, (course) => course.prerequisteCourses, {eager: true})
   @JoinColumn({ name: 'course_id' })
   course: Course;
 
-  @ManyToOne(() => Course)
+  @ManyToOne(() => Course, { eager: true })
   @JoinColumn({ name: 'prerequiste_course_id' })
   prerequisteCourse: Course;
 }

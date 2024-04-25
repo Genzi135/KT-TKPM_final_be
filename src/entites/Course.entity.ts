@@ -27,6 +27,6 @@ export class Course {
   @JoinColumn({ name: 'major_id' })
   major: Major;
 
-  @OneToMany(() => PrerequisteCourse, (prerequisteCourse) => prerequisteCourse.course, { eager: true, cascade: true })
+  @OneToMany(() => PrerequisteCourse, (prerequisteCourse) => prerequisteCourse.course)
   prerequisteCourses: PrerequisteCourse[];
 }
