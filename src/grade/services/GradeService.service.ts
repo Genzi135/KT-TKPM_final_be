@@ -52,11 +52,11 @@ export class GradeService {
         semester,
         grades,
         semesterCredits,
-        semesterGrade: Math.round(semesterGrade / semesterCredits),
-        semesterGpa4: Math.round(semesterGpa4 / semesterCredits),
+        semesterGrade: Math.round((semesterGrade / semesterCredits) * 100) / 100,
+        semesterGpa4: Math.round((semesterGpa4 / semesterCredits) * 100) / 100,
         totalCredits,
-        accumulatedGrade: Math.round(accumulatedGrade / totalCredits),
-        accumulatedGpa4: Math.round(accumulatedGpa4 / totalCredits),
+        accumulatedGrade: Math.round((accumulatedGrade / totalCredits) * 100) / 100,
+        accumulatedGpa4: Math.round((accumulatedGpa4 / totalCredits) * 100) / 100,
       };
     });
     // log(result);
