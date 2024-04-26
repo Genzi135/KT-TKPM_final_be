@@ -42,6 +42,10 @@ export class GradeService {
         semesterGrade += grade.averageGrade * grade.courseCredits;
         semesterGpa4 += grade.gpa4 * grade.courseCredits;
         semesterLetterGrade += grade.letterGrade;
+
+        totalCredits += grade.courseCredits;
+        accumulatedGrade += grade.averageGrade * grade.courseCredits;
+        accumulatedGpa4 += grade.gpa4 * grade.courseCredits;
       });
 
       return {
@@ -50,6 +54,9 @@ export class GradeService {
         semesterCredits,
         semesterGrade: Math.round(semesterGrade / semesterCredits),
         semesterGpa4: Math.round(semesterGpa4 / semesterCredits),
+        totalCredits,
+        accumulatedGrade: Math.round(accumulatedGrade / totalCredits),
+        accumulatedGpa4: Math.round(accumulatedGpa4 / totalCredits),
       };
     });
     // log(result);
