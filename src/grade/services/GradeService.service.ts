@@ -17,8 +17,8 @@ export class GradeService {
       relations: ['course', 'semester'],
     });
 
-    const results = grades.map((grade) => new CourseResponseDto(grade));
+    const gradeDto = grades.map((grade) => new CourseResponseDto(grade));
 
-    return results;
+    return gradeDto;
   }
 }

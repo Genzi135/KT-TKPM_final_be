@@ -13,6 +13,9 @@ export class CourseResponseDto {
   midTermGrade: number;
   finalTermGrade: number;
   averageGrade: number;
+  gpa4: number;
+  letterGrade: string;
+  classifictaion: string;
   isPassed: boolean;
   semester: string;
 
@@ -29,6 +32,9 @@ export class CourseResponseDto {
     this.midTermGrade = grade.midTermGrade;
     this.finalTermGrade = grade.finalGrade;
     this.averageGrade = grade.averageGrade;
+    this.gpa4 = grade.gpa4;
+    this.letterGrade = grade.gradeLetter;
+    this.classifictaion = grade.classification;
     this.isPassed = grade.isPassed;
     this.semester = `${grade.semester.name} (${grade.semester.academicYear})`;
   }
