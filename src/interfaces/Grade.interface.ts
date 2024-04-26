@@ -1,3 +1,5 @@
+import { GradeResponseDto } from 'src/grade/dtos/GradeResponseDto';
+
 export enum GradeClassification {
   FAILED = 'Kém',
   WEAK = 'Yếu',
@@ -17,4 +19,8 @@ export enum GradeLetter {
   D_PLUS = 'D+',
   D = 'D',
   F = 'F',
+}
+
+export interface GradeGroupBySemester {
+  [semester: string]: GradeResponseDto[];
 }

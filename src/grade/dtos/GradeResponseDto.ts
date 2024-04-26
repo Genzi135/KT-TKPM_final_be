@@ -1,6 +1,6 @@
 import { Grade } from 'src/entites/Grade.entity';
 
-export class CourseResponseDto {
+export class GradeResponseDto {
   courseName: string;
   courseCredits: number;
   lethicalGrade1: number;
