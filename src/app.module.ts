@@ -7,6 +7,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { CourseModule } from './course/course.module';
 import { Enrollment } from './entites/Enrollment.entity';
+import { GradeModule } from './grade/grade.module';
 
 @Module({
   imports: [
@@ -30,7 +31,7 @@ import { Enrollment } from './entites/Enrollment.entity';
     AuthModule,
     UserModule,
     CourseModule,
-    Enrollment
+    GradeModule,
   ],
   controllers: [AppController],
   providers: [AppService],
