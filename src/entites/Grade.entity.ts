@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn, PrimaryGeneratedColumn } from 'typeorm';
 import { Course } from './Course.entity';
 import { Student } from './Student.entity';
 import { Semester } from './Semester.entity';
@@ -6,8 +6,14 @@ import { GradeClassification, GradeLetter } from 'src/interfaces/Grade.interface
 
 @Entity({ name: 'grades' })
 export class Grade {
-  @PrimaryGeneratedColumn()
-  id: number;
+  @PrimaryColumn({name: 'course_id'})
+  courseId: number;
+
+  @PrimaryColumn({name: 'student_id'})
+  studentId: string;
+
+  @PrimaryColumn({name: 'semester_id'})
+  semesterId: number;
 
   @ManyToOne(() => Course, { eager: true })
   @JoinColumn({ name: 'course_id' })
@@ -62,4 +68,7 @@ export class Grade {
 
   @Column({ name: 'is_passed' })
   isPassed: boolean;
+
+  @Column({ name: 'is_deleted', default: false})
+  isDeleted: boolean;
 }

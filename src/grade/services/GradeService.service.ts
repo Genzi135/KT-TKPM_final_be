@@ -38,12 +38,11 @@ export class GradeService {
       let semesterLetterGrade = '';
 
       grades.forEach((grade) => {
-        semesterCredits += grade.courseCredits;
+        semesterCredits += grade.isPassed ? grade.courseCredits : 0;
         semesterGrade += grade.averageGrade * grade.courseCredits;
         semesterGpa4 += grade.gpa4 * grade.courseCredits;
-        semesterLetterGrade += grade.letterGrade;
 
-        totalCredits += grade.courseCredits;
+        totalCredits += grade.isPassed ? grade.courseCredits : 0;
         accumulatedGrade += grade.averageGrade * grade.courseCredits;
         accumulatedGpa4 += grade.gpa4 * grade.courseCredits;
       });
