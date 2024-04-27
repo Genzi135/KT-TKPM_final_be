@@ -3,8 +3,8 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Grade } from 'src/entites/Grade.entity';
 import { Repository } from 'typeorm';
 import { GradeResponseDto } from '../dtos/GradeResponseDto';
-import { log } from 'console';
 import { GradeGroupBySemester } from 'src/interfaces/Grade.interface';
+import { generateLetterGrade } from '../utils/utils';
 
 @Injectable()
 export class GradeService {
@@ -47,12 +47,15 @@ export class GradeService {
         accumulatedGpa4 += grade.gpa4 * grade.courseCredits;
       });
 
+      semesterLetterGrade = generateLetterGrade(Math.round((semesterGpa4 / semesterCredits) * 100) / 100);
+
       return {
         semester,
         grades,
         semesterCredits,
         semesterGrade: Math.round((semesterGrade / semesterCredits) * 100) / 100,
         semesterGpa4: Math.round((semesterGpa4 / semesterCredits) * 100) / 100,
+        semesterLetterGrade,
         totalCredits,
         accumulatedGrade: Math.round((accumulatedGrade / totalCredits) * 100) / 100,
         accumulatedGpa4: Math.round((accumulatedGpa4 / totalCredits) * 100) / 100,
