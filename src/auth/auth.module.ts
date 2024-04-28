@@ -5,10 +5,12 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { Authentication } from 'src/entites/Authentication.entity';
 import { JwtModule } from '@nestjs/jwt';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { Student } from 'src/entites/Student.entity';
+import { Teacher } from 'src/entites/Teacher.entity';
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([Authentication]),
+    TypeOrmModule.forFeature([Authentication, Student, Teacher]),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],

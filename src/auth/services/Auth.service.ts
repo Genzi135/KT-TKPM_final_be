@@ -5,12 +5,18 @@ import { Repository } from 'typeorm';
 import { LoginDto } from '../dtos/LoginDto';
 import { LoginResponseDto } from '../dtos/LoginResponseDto';
 import { JwtService } from '@nestjs/jwt';
+import { Student } from 'src/entites/Student.entity';
+import { Teacher } from 'src/entites/Teacher.entity';
 
 @Injectable()
 export class AuthService {
   constructor(
     @InjectRepository(Authentication)
     private readonly authRepository: Repository<Authentication>,
+    @InjectRepository(Student)
+    private readonly studentRepository: Repository<Student>,
+    @InjectRepository(Teacher)
+    private readonly teacherRepository: Repository<Teacher>,
     private readonly jwtService: JwtService,
   ) {}
 
@@ -26,6 +32,10 @@ export class AuthService {
     const payload = { id: auth.username, type: auth.type };
     const token = this.jwtService.sign(payload);
 
-    return new LoginResponseDto(token);
+    let user = null;
+    if(auth.type === 'student') user = await this.studentRepository.findOne({ where: { id: auth.username } });
+    else if(auth.type === 'teacher') user = await this.teacherRepository.findOne({ where: { id: auth.username } });
+
+    return new LoginResponseDto({token, user});
   }
 }

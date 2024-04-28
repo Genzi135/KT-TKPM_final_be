@@ -24,6 +24,7 @@ export class SemesterService {
 
         const getSemesters = await this.semesterRepository.createQueryBuilder('semester')
             .where('SUBSTRING(semester.academicYear, 1, 4) >= :year', {year: student.academicYear.substring(0, 4)})
+            .orderBy('SUBSTRING(semester.academicYear, 1, 4)', 'ASC')
             .getMany();
         
         return getSemesters;
