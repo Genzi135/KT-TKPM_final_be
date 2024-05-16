@@ -30,6 +30,15 @@ export class Class {
     @JoinColumn({name: 'course_id'})
     course: Course;
 
+    @Column({name: 'period_start'})
+    periodStart: number;
+
+    @Column({name: 'period_end'})
+    periodEnd: number;
+    
+    @Column({name: 'day_of_week'})
+    dayOfWeek: number;
+
     @Column({name: 'status', type: 'enum', enum: ClassStatus, default: ClassStatus.PLAN})
     status: ClassStatus;
 }

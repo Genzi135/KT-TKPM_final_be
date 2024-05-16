@@ -23,8 +23,26 @@ export class EnrollmentService {
         if(!classData) throw new BadRequestException('Không tìm thấy lớp học. Vui lòng kiểm tra lại!');
         if(classData.currentStudents >= classData.maxStudents) throw new BadRequestException('Đã đủ số lượng sinh viên cho lớp học này!');
         if(classData.status === ClassStatus.PLAN) throw new BadRequestException('Không thể đăng ký lớp học này!');
-
+        
         const semesterEntity = classData.semester;
+        const periodStart = classData.periodStart;
+        const periodEnd = classData.periodEnd;
+        const dayOfWeek = classData.dayOfWeek;
+
+        const studentEnrollments = await this.enrollmentRepository.find({where: {student: {id: userId}, semester: semesterEntity}, relations: ['class']});
+        let isTimeConflict = false;
+        for(const enrollment of studentEnrollments){
+            const enrolledClass = enrollment.class;
+            if(enrolledClass.dayOfWeek === dayOfWeek){
+                if((enrolledClass.periodStart <= periodStart && periodStart <= enrolledClass.periodEnd) || (enrolledClass.periodStart <= periodEnd && periodEnd <= enrolledClass.periodEnd)){
+                    isTimeConflict = true;
+                    break;
+                }
+            }
+        }
+
+        if(isTimeConflict) throw new BadRequestException('Thời gian học bị trùng lịch!');
+
         const now = new Date();
         if(now.getTime() < new Date(semesterEntity.startRegistration).getTime() || now.getTime() > new Date(semesterEntity.endDateRegistration).getTime()) throw new BadRequestException('Không thể đăng ký lớp học này!');
         const studentEntity = new Student();
