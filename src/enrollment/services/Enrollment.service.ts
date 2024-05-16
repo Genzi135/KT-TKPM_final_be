@@ -6,6 +6,7 @@ import { Enrollment } from "src/entites/Enrollment.entity";
 import { Student } from "src/entites/Student.entity";
 import { Repository } from "typeorm";
 import { EnrollmentResponse } from "../dtos/EnrollmentResponse.dto";
+import { ClassStatus } from "src/interfaces/class.interface";
 
 @Injectable()
 export class EnrollmentService {
@@ -21,7 +22,8 @@ export class EnrollmentService {
         const classData = await this.classRepository.findOne({where: {id: classId}, relations: ['semester']});
         if(!classData) throw new BadRequestException('Không tìm thấy lớp học. Vui lòng kiểm tra lại!');
         if(classData.currentStudents >= classData.maxStudents) throw new BadRequestException('Đã đủ số lượng sinh viên cho lớp học này!');
-        
+        if(classData.status === ClassStatus.PLAN) throw new BadRequestException('Không thể đăng ký lớp học này!');
+
         const semesterEntity = classData.semester;
         const now = new Date();
         if(now.getTime() < new Date(semesterEntity.startRegistration).getTime() || now.getTime() > new Date(semesterEntity.endDateRegistration).getTime()) throw new BadRequestException('Không thể đăng ký lớp học này!');
