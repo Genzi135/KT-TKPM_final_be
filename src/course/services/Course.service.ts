@@ -8,6 +8,7 @@ import { Grade } from "src/entites/Grade.entity";
 import { Student } from "src/entites/Student.entity";
 import { Repository } from "typeorm";
 import { CourseResponseDto } from "../dtos/CourseResponseDto";
+import { Enrollment } from "src/entites/Enrollment.entity";
 
 @Injectable()
 export class CourseService {
@@ -21,7 +22,9 @@ export class CourseService {
         @InjectRepository(Student)
         private readonly studentRepository: Repository<Student>,
         @InjectRepository(Class)
-        private readonly classRepository: Repository<Class>
+        private readonly classRepository: Repository<Class>,
+        @InjectRepository(Enrollment)
+        private readonly enrollmentRepository: Repository<Enrollment>,
     ) { }
 
     async getCurrilumCourses({ academicYear, majorId }): Promise<CourseResponseDto[]> {
@@ -42,7 +45,7 @@ export class CourseService {
     async getCourseForRegistration({ studentId, semesterId }): Promise<CourseResponseDto[]> {
         const student = await this.studentRepository.findOne({ where: { id: studentId }, relations: ['major'] });
 
-        const [curriculum, getStudentCourseHasGrade, classInSemeseter] = await Promise.all([
+        const [curriculum, getStudentCourseHasGrade, classInSemeseter, studentEnrollments] = await Promise.all([
             this.curriculumRepository.findOne({
                 where: {
                     academicYear: student.academicYear,
@@ -51,7 +54,8 @@ export class CourseService {
                 relations: ['curriculumCourses', 'curriculumCourses.course', 'curriculumCourses.course.prerequisteCourses']
             }),
             this.gradeRepository.find({ where: { student: { id: studentId } } }),
-            this.classRepository.find({ where: { semester: { id: semesterId } }, relations: ['course'] })
+            this.classRepository.find({ where: { semester: { id: semesterId } }, relations: ['course'] }),
+            this.enrollmentRepository.find({ where: { student: { id: studentId }, semester: {id: semesterId} }, relations: ['class', 'class.course'] })
         ]);
 
         const curriculumCourses = curriculum.curriculumCourses;
@@ -70,6 +74,14 @@ export class CourseService {
             });
 
             return isCourseInCurrentSemester;
+        })
+
+        result = result.filter(el => {
+            const isStudentEnrolled = studentEnrollments.some(enrollment => {
+                return enrollment.class.course.id === el.course.id;
+            })
+
+            return !isStudentEnrolled;
         })
 
         result = result.map(curriculumCourse => {
