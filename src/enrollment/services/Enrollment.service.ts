@@ -6,7 +6,7 @@ import { Enrollment } from "src/entites/Enrollment.entity";
 import { Student } from "src/entites/Student.entity";
 import { Repository } from "typeorm";
 import { EnrollmentResponse } from "../dtos/EnrollmentResponse.dto";
-import { ClassStatus } from "src/interfaces/class.interface";
+import { ClassStatus, ClassType } from "src/interfaces/class.interface";
 
 @Injectable()
 export class EnrollmentService {
@@ -30,6 +30,7 @@ export class EnrollmentService {
         const periodStartPractice = classData.periodStartPractice;
         const periodEndPractice = classData.periodEndPractice;
         const dayOfWeekPractice = classData.dayOfWeekPractice;
+        const isPractice = classData.type === ClassType.PRACTICE;
 
         const checkTimeOverlap = (start1, end1, start2, end2) => {
             return (start1 <= start2 && start2 <= end1) ||
@@ -43,18 +44,20 @@ export class EnrollmentService {
         };
 
         const studentEnrollments = await this.enrollmentRepository.find({ where: { student: { id: userId }, semester: semesterEntity }, relations: ['class'] });
+        
         let isTimeConflict = false;
         for (const enrollment of studentEnrollments) {
             const enrolledClass = enrollment.class;
+
             if (checkDayOverlap(enrolledClass.dayOfWeek, dayOfWeek) ||
-                checkDayOverlap(enrolledClass.dayOfWeek, dayOfWeekPractice) ||
-                checkDayOverlap(enrolledClass.dayOfWeekPractice, dayOfWeek) ||
-                checkDayOverlap(enrolledClass.dayOfWeekPractice, dayOfWeekPractice)) {
+                (isPractice && checkDayOverlap(enrolledClass.dayOfWeek, dayOfWeekPractice)) ||
+                (isPractice && checkDayOverlap(enrolledClass.dayOfWeekPractice, dayOfWeek)) ||
+                (isPractice && checkDayOverlap(enrolledClass.dayOfWeekPractice, dayOfWeekPractice))) {
 
                 if (checkTimeOverlap(enrolledClass.periodStart, enrolledClass.periodEnd, periodStart, periodEnd) ||
-                    checkTimeOverlap(enrolledClass.periodStart, enrolledClass.periodEnd, periodStartPractice, periodEndPractice) ||
-                    checkTimeOverlap(enrolledClass.periodStartPractice, enrolledClass.periodEndPractice, periodStart, periodEnd) ||
-                    checkTimeOverlap(enrolledClass.periodStartPractice, enrolledClass.periodEndPractice, periodStartPractice, periodEndPractice)) {
+                    (isPractice && checkTimeOverlap(enrolledClass.periodStart, enrolledClass.periodEnd, periodStartPractice, periodEndPractice)) ||
+                    (isPractice && checkTimeOverlap(enrolledClass.periodStartPractice, enrolledClass.periodEndPractice, periodStart, periodEnd)) ||
+                    (isPractice && checkTimeOverlap(enrolledClass.periodStartPractice, enrolledClass.periodEndPractice, periodStartPractice, periodEndPractice))) {
                     isTimeConflict = true;
                     break;
                 }
