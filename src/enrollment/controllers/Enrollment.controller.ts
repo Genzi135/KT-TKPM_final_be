@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
+import { Controller, Delete, Get, Param, Post, Req, UseGuards } from "@nestjs/common";
 import { AuthGuard } from "src/auth/guards/AuthGuard.guard";
 import { EnrollmentService } from "../services/Enrollment.service";
 import { response } from "express";
@@ -17,6 +17,16 @@ export class EnrollmentController {
         const {id: userId} = req['user'];
         await this.enrollmentService.enrollCourse(classId, userId);
         return response.status(201);
+    }
+
+    @Delete('/class/:classId')
+    @UseGuards(AuthGuard)
+    async deleteEnrollment(
+                            @Req() req: Request, 
+                            @Param('classId') classId: number){
+        const {id: userId} = req['user'];
+        await this.enrollmentService.removeEnrolledCourse(classId, userId);
+        return response.status(200);
     }
 
     @Get('/semester/:semesterId')

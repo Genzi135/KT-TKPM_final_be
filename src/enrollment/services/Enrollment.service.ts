@@ -66,4 +66,18 @@ export class EnrollmentService {
         const response = enrollments.map(enrollment => new EnrollmentResponse(enrollment));
         return response;
     }
+
+    async removeEnrolledCourse(classId: number, userId: string): Promise<void>{
+        const classData = await this.classRepository.findOne({where: {id: classId}});
+        if(!classData) throw new BadRequestException('Không tìm thấy lớp học. Vui lòng kiểm tra lại!');
+        if(classData.status === ClassStatus.FINISHED) throw new BadRequestException('Lớp học đã được bắt đầu! Không thể hủy đăng ký!');
+        
+        const studentEntity = new Student();
+        studentEntity.id = userId;
+        const enrollment = await this.enrollmentRepository.findOne({where: {student: studentEntity, class: classData}});
+        if(!enrollment) throw new BadRequestException('Bạn chưa đăng ký lớp học này!');
+        await this.enrollmentRepository.remove(enrollment);
+        classData.currentStudents -= 1;
+        await this.classRepository.save(classData);
+    }
 }
