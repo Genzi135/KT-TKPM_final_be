@@ -13,6 +13,7 @@ export class CourseResponseDto {
     major: Major;
     maxElectiveCredits: number;
     type: CurriculumCourseType;
+    semester: number;
     prerequisteCourses: Course[];
 
     constructor(data: CurriculumCourse) {
@@ -26,5 +27,6 @@ export class CourseResponseDto {
         this.prerequisteCourses = data.course.prerequisteCourses.map(prerequisteCourse => prerequisteCourse.prerequisteCourse);
         this.maxElectiveCredits = data.maxElectiveCredits
         this.type = data.type;
+        this.semester = data.semester;
     }
 }
