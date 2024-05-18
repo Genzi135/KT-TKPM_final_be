@@ -99,9 +99,7 @@ export class EnrollmentService {
         const now = new Date();
         if (now.getTime() < new Date(classData.semester.startRegistration).getTime() || now.getTime() > new Date(classData.semester.endDateRegistration).getTime()) throw new BadRequestException('Không thể hủy đăng ký lớp học này!');
 
-        const studentEntity = new Student();
-        studentEntity.id = userId;
-        const enrollment = await this.enrollmentRepository.findOne({ where: { student: studentEntity, class: {id: classId} } });
+        const enrollment = await this.enrollmentRepository.findOne({ where: { student: {id: userId}, class: {id: classId} } });
         if (!enrollment) throw new BadRequestException('Bạn chưa đăng ký lớp học này!');
         if (enrollment.isEnrolled) throw new BadRequestException('Không thể hủy đăng ký lớp học này!');
         await this.enrollmentRepository.remove(enrollment);
