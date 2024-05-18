@@ -64,9 +64,11 @@ export class CourseService {
         })
         
         const courseInCurrentSemester = classInSemeseter.map(class_ => class_.course);
-        
         result = result.filter(el => {
-            const isCourseInCurrentSemester = courseInCurrentSemester.some(course => course.id === course.id);
+            const isCourseInCurrentSemester = courseInCurrentSemester.some(course => {
+                return el.course.id === course.id
+            });
+
             return isCourseInCurrentSemester;
         })
 
