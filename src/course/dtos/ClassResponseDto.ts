@@ -7,6 +7,14 @@ export class ClassResponseDto {
     teacher: string;
     currentStudents: number;
     maxStudents: number;
+    periodStart: number;
+    periodEnd: number;
+    dayOfWeek: number;
+    periodStartPractice: number;
+    periodEndPractice: number;
+    dayOfWeekPractice: number;
+    room: string;
+    roomPractice: string;
     status: string;
 
     constructor(data: Class) {
@@ -17,5 +25,13 @@ export class ClassResponseDto {
         this.currentStudents = data.currentStudents;
         this.maxStudents = data.maxStudents;
         this.status = data.status;
+        this.periodStart = data.periodStart;
+        this.periodEnd = data.periodEnd;
+        this.dayOfWeek = data.dayOfWeek;
+        this.periodStartPractice = data.periodStartPractice;
+        this.periodEndPractice = data.periodEndPractice;
+        this.dayOfWeekPractice = data.dayOfWeekPractice;
+        this.room = data.room;
+        this.roomPractice = data.roomPractice;
     }
 }

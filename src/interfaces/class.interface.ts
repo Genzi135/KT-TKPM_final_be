@@ -3,3 +3,8 @@ export enum ClassStatus {
     'ONGOING' = 'Cho phép đăng ký',
     'FINISHED' = 'Chấp nhận mở lớp',
 }
+
+export enum ClassType {
+    'LECTURE' = 'Lý thuyết',
+    'PRACTICE' = 'Thực hành',
+}

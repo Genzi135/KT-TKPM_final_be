@@ -1,7 +1,7 @@
 import { Column, Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 import { Semester } from "./Semester.entity";
 import { Teacher } from "./Teacher.entity";
-import { ClassStatus } from "src/interfaces/class.interface";
+import { ClassStatus, ClassType } from "src/interfaces/class.interface";
 import { Course } from "./Course.entity";
 
 @Entity({name: 'classes'})
@@ -38,6 +38,24 @@ export class Class {
     
     @Column({name: 'day_of_week'})
     dayOfWeek: number;
+
+    @Column({name: 'period_start_practice'})
+    periodStartPractice: number;
+
+    @Column({name: 'period_end_practice'})
+    periodEndPractice: number;
+    
+    @Column({name: 'day_of_week_practice'})
+    dayOfWeekPractice: number;
+
+    @Column({name: 'room'})
+    room: string;
+
+    @Column({name: 'room_practice'})
+    roomPractice: string;
+
+    @Column({name: 'type', type: 'enum', enum: ClassType, default: ClassType.LECTURE})
+    type: ClassType;
 
     @Column({name: 'status', type: 'enum', enum: ClassStatus, default: ClassStatus.PLAN})
     status: ClassStatus;
