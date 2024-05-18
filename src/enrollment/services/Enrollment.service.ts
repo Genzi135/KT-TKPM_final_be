@@ -91,6 +91,7 @@ export class EnrollmentService {
     }
 
     async removeEnrolledCourse(enrollmentId: number, userId: string): Promise<void> {
+        //
         const enrollment = await this.enrollmentRepository.findOne({ where: { id: enrollmentId, student: { id: userId } }, relations: ['class'] });
         if (!enrollment) throw new BadRequestException('Bạn chưa đăng ký lớp học này!');
         if (enrollment.isEnrolled) throw new BadRequestException('Không thể hủy đăng ký lớp học này!');
